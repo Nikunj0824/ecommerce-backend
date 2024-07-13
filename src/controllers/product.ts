@@ -3,6 +3,7 @@ import { TryCatch } from "../middlewares/error.js";
 import { BaseQuery, NewProductRequestBody, SearchRequestQuery } from "../types/type.js"
 import { Product } from "../models/product.js";
 import ErrorHandler from "../utils/utility-class.js";
+import { invalidateCache } from "../utils/features.js";
 
 
 export const newProduct = TryCatch(
@@ -14,6 +15,8 @@ export const newProduct = TryCatch(
         }
 
         await Product.create({ name, imageUrl, price, description, stock, category: category.toLocaleLowerCase() });
+
+        await invalidateCache({ product: true });
 
         return res.status(201).json({
             success: true,
@@ -81,6 +84,8 @@ export const updateProduct = TryCatch(
 
         await product.save();
 
+        await invalidateCache({ product: true });
+
         return res.status(200).json({
             success: true,
             message: "Product updated successfully"
@@ -96,6 +101,8 @@ export const deleteProduct = TryCatch(
         if (!product) {
             return next(new ErrorHandler("Product not found", 404));
         }
+
+        await invalidateCache({ product: true });
 
         res.status(200).json({
             success: true,

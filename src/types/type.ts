@@ -42,3 +42,9 @@ export interface BaseQuery {
     price?: { $lte: Number };
     category?: String
 }
+
+export type InvalidateCache = {
+    product?: boolean;
+    order?: boolean;
+    admin?: boolean;
+}
