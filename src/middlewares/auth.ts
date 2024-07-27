@@ -19,7 +19,7 @@ export const adminOnly = TryCatch(async (req, res, next) => {
     }
 
     if (user.role != "admin") {
-        return next(new ErrorHandler("Action not allowed", 401));
+        return next(new ErrorHandler("Action not allowed", 403));
     }
 
     next();
